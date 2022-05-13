@@ -2,6 +2,10 @@ from fastapi import FastAPI
 import asyncio
 import aioredis
 
+from app import database as db
+from sqlalchemy.orm import Session
+from app.database import engine
+
 app = FastAPI()
 
 def anagramCheck(str1,str2):
@@ -25,3 +29,18 @@ async def read_item(str1: str = "", str2: str = ""):
         return {'anagram':'true', 'count':count}
     else:
         return {'anagram':'false'}
+
+@app.get("/mac/",status_code=201)
+async def add_mac():
+    for i in range(10):
+        with Session(engine) as session:
+            item = db.Item()
+            item.setRandType()
+            item.setRandId()            
+            if i < 5:
+                endpoint = db.Endpoint()
+                item.endpoint = endpoint
+                session.add(endpoint)
+            session.add(item)
+            session.commit()
+    return {'mac':'success'}
