@@ -4,8 +4,6 @@ import aioredis
 
 app = FastAPI()
 
-fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
-
 def anagramCheck(str1,str2):
     if sorted(str1) == sorted(str2):
         return True
