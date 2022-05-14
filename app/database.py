@@ -6,9 +6,10 @@ from sqlalchemy import create_engine, MetaData, Table, Integer, String, \
 import random
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import func
+from app.settings import SQLALCHEMY_DATABASE_URL
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-SQLALCHEMY_DATABASE_URL = "postgresql://admin3:pass@192.168.0.102/test3"
+# SQLALCHEMY_DATABASE_URL = "postgresql://admin3:pass@192.168.0.102/test3"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={}

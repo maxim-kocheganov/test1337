@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.database import Item, engine
 from sqlalchemy import null
 from sqlalchemy import func
+from app.settings import REDIS_URL
 
 app = FastAPI()
 
@@ -17,7 +18,7 @@ def anagramCheck(str1,str2):
         return False
 
 async def inc():
-    redis = aioredis.from_url("redis://192.168.0.102") #Place your ip
+    redis = aioredis.from_url(REDIS_URL) #Place your ip
     #await redis.set("my-key", "value")
     #Evalue = await redis.get("my-key")
     res = await redis.incr("countOfAn")
