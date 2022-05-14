@@ -4,7 +4,9 @@ import aioredis
 
 from app import database as db
 from sqlalchemy.orm import Session
-from app.database import engine
+from app.database import Item, engine
+from sqlalchemy import null
+from sqlalchemy import func
 
 app = FastAPI()
 
@@ -30,7 +32,7 @@ async def read_item(str1: str = "", str2: str = ""):
     else:
         return {'anagram':'false'}
 
-@app.get("/mac/",status_code=201)
+@app.get("/newmac/",status_code=201)
 async def add_mac():
     for i in range(10):
         with Session(engine) as session:
@@ -39,8 +41,20 @@ async def add_mac():
             item.setRandId()            
             if i < 5:
                 endpoint = db.Endpoint()
-                item.endpoint = endpoint
                 session.add(endpoint)
+                session.flush()               
+                item.endpoint_id = endpoint.id
             session.add(item)
             session.commit()
     return {'mac':'success'}
+
+@app.get("/endpoint/")
+async def enpoint():
+    countArr = []
+    with Session(engine) as session:
+        allTypes = session.query(Item).distinct(Item.dev_type).all()
+        for _type in allTypes:
+            typeStr = _type.dev_type
+            count = session.query(Item).filter(Item.dev_type == typeStr).count()
+            countArr.append({typeStr:count})
+    return {'endpoints':countArr}
